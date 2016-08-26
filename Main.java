@@ -27,9 +27,17 @@ public class Main {
             Find maximum x that solves the equation
             x = sqrt(d×y^2 + 1)
          */
-        int maxD = 0, maxX = 0, x;
-        for(int d = 1; d <= 1000; d++) {
+        int maxD = 0, maxX = 0, x, maximum = 7;
+        // Memoise squares
+        boolean isSquare[] = new boolean[maximum+1];
+        for(int d = 1; d <= maximum; d++) {
+            if(d*d <= maximum)
+                isSquare[d*d] = true;
+            if(isSquare[d])
+                continue;
+            // Given d, find maximal solution x
             x = solveEquation(d);
+            // Update maximum if necessary
             if(x > maxX) {
                 maxX = x;
                 maxD = d;
@@ -45,10 +53,36 @@ public class Main {
      *
      * x and y must both be positive integers.
      *
-     * @param d An integer
+     * @param d a positive integer
      * @return The maximum value for x that satisfies the equation.
      */
-    static int solveEquation(int d) {
-        // Code here
+    private static int solveEquation(int d) {
+        // Brute-force approach
+        int x, y, maxX = 0;
+        // Change upper bound
+        for(y = 1; y < 10; y++)
+            if((x = testEquation(d, y)) > maxX)
+                maxX = x;
+
+        return maxX;
+    }
+
+    /**
+     * Given d, y, solve x = sqrt(d×y<super>2</super> + 1)
+     * @param d a positive integer
+     * @param y a positive integer
+     * @return x, if x is an integer. Else, 0.
+     */
+    private static int testEquation(int d, int y){
+        double result = Math.sqrt(d*y*y + 1);
+        return isInteger(result) ? (int) result : 0;
+    }
+
+    /**
+     * Returns whether a double is an integer or not.
+     * @param x a double
+     */
+    public static boolean isInteger(double x){
+        return x == Math.floor(x) && !Double.isInfinite(x);
     }
 }
