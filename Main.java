@@ -27,11 +27,11 @@ public class Main {
             Find maximum x that solves the equation
             x = sqrt(d×y^2 + 1)
          */
-        int maxD = 0, maxX = 0, x, maximum = 7;
+        int maxD = 0, maxX = 0, x, maximum = 13;
         // Memoise squares
         boolean isSquare[] = new boolean[maximum+1];
         for(int d = 1; d <= maximum; d++) {
-            if(d*d <= maximum)
+            if(d > 1 && d*d <= maximum)
                 isSquare[d*d] = true;
             if(isSquare[d])
                 continue;
@@ -54,17 +54,19 @@ public class Main {
      * x and y must both be positive integers.
      *
      * @param d a positive integer
-     * @return The maximum value for x that satisfies the equation.
+     * @return The minimum satisfactory value for x.
      */
     private static int solveEquation(int d) {
         // Brute-force approach
-        int x, y, maxX = 0;
-        // Change upper bound
-        for(y = 1; y < 10; y++)
-            if((x = testEquation(d, y)) > maxX)
-                maxX = x;
+        int x, y;
 
-        return maxX;
+        // I'm not quite sure what the UB for y should be
+        for(y = 1; y <= d*d; y++)
+            if((x = testEquation(d, y)) > 0)
+                return x;
+
+        // Couldn't find anything
+        return 0;
     }
 
     /**
@@ -82,7 +84,7 @@ public class Main {
      * Returns whether a double is an integer or not.
      * @param x a double
      */
-    public static boolean isInteger(double x){
+    private static boolean isInteger(double x){
         return x == Math.floor(x) && !Double.isInfinite(x);
     }
 }
